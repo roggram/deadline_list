@@ -6,18 +6,6 @@ import datetime
 # 道添以下一行を追加
 from pymongo import MongoClient
 
-"""
-def data():
-  base_time = datetime.datetime(2023,11, 10, 12 ,00 ,00)
-  tasks = [
-    { "id":1, "title":"ネギを買う", "created_at":base_time },
-    { "id":2, "title":"山田と飯", "created_at":base_time + datetime.timedelta(3) },
-    { "id":3, "title":"豊島園に行く", "created_at":base_time - datetime.timedelta(2) },
-    { "id":4, "title":"面接", "created_at":base_time + datetime.timedelta(5) },
-    { "id":5, "title":"美容室に行く", "created_at":base_time - datetime.timedelta(6) }
-  ]
-  return tasks
- """
 # mongoDBにアプリ側からデータを入れられるようにする
 client = MongoClient("localhost:27017")
 
