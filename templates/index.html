@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="row">
+	<div class="col-md-6 offset-md-2">
+		<form method="post" action="/" class="form row">
+			<div class="form-group col">
+				<select name="q" class="form-control my-4">
+					<option value="" {% if q=="" %} selected {% end %}>並び順を選択</option>
+					<option value="asc" {% if q=="asc" %} selected {% end %}>優先度</option>
+					<option value="desc" {% if q=="desc" %} selected {% end %}>しめきり</option>
+				</select>
+			</div>
+			<div class="form-group col">
+				<input type="submit" value="並び替える" class="btn btn-success my-4">
+			</div>
+		</form>
+	</div>
+</div>
+<div class="row">
+	<div class="col-md-8 offset-md-2">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>すべきこと</th>
+					<th>優先度</th>
+					<th>しめきり</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for task in tasks %}
+					<tr>
+						<td>{{ task["id"] }}</td>
+						<td>{{ task["title"] }}</td>
+						<td>{{ task["created_at"] }}</td>
+					</tr>
+				{% end %}
+			</tbody>
+				<form action="/submit" method="post">
+				<label for="">すべきこと：</label>
+				<input type="text" id="task" name="task">
+				<br>
+				<label for="registration_date">優先度(1~5)：</label>
+				<input type="text" id="registration_date" name="registration_date">
+				<br>
+				<label for="">しめきり：　</label>
+				<input type="text" id="deadline" name="deadline">
+				<br>
+				<button>登録</button>
+				<br>
+			</form>
+		</table>
+    </div>
+</div>
+{% end %}
