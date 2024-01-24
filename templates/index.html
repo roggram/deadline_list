@@ -36,16 +36,19 @@
 					</tr>
 				{% end %}
 			</tbody>
-				<form action="/submit" method="post">
+			<form action="/tasks" method="post">
 				<label for="">すべきこと：</label>
 				<input type="text" id="task" name="task">
 				<br>
+
 				<label for="registration_date">優先度(1~5)：</label>
 				<input type="text" id="registration_date" name="registration_date">
 				<br>
-				<label for="">しめきり：　</label>
+
+				<label for="">しめきり：</label>
 				<input type="text" id="deadline" name="deadline">
 				<br>
+				
 				<button>登録</button>
 				<br>
 			</form>
