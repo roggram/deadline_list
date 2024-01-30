@@ -14,10 +14,8 @@ def data():
   collection = db["tasks"]
   tasks = collection.find()
   return tasks
-# ですので今回はmongoDB側の作業を行う前の段階でテンプレート側以外でエラーが起きていない状態を作ればOKです
 
 class MainHandler(tornado.web.RequestHandler):
-
   def get(self):
     tasks = data()
     q = ""
@@ -34,9 +32,24 @@ class MainHandler(tornado.web.RequestHandler):
       tasks = sorted(tasks, key=lambda o:o['created_at'])
     self.render("index.html", tasks=tasks, q=q)
 
+class TasksHandler(tornado.web.RequestHandler):
+  def post(self):
+    #↓のprintでパラメーターの確認ができます。
+    print(self.get_argument('task'))
+    print(self.get_argument('registration_date'))
+    print(self.get_augument('deadline'))
+    #ここからDBに登録する。
+    
+
+
+    #最後にリダイレクト。
+    self.redirect("/")
+
 application = tornado.web.Application([
   (r"/", MainHandler),
+  (r"/tasks", TasksHandler)
   ],
+  # 以下の一文の意味がわかりません
   template_path=os.path.join(os.path.dirname(__file__), 'templates')
 )
 
