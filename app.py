@@ -29,11 +29,11 @@ class MainHandler(tornado.web.RequestHandler):
     tasks = data()
     q = self.get_argument('q')
     print(q)
-    if q == "deadline_order":
-      tasks = sorted(tasks, key=lambda o:o['priority_order'])
-    elif q == "priority_order":
-      #tasksをcreated_atの値をキーとして降順に並べる
-      tasks = sorted(tasks, key=lambda o:o['deadline'])
+    if q == "priority_order":
+      tasks = sorted(tasks, key=lambda o:o['priority_order'],reverse=True)
+    elif q == "deadline_order":
+      #tasksをdeadline_orderの降順に並べる
+      tasks = sorted(tasks, key=lambda o:o['deadline'],reverse=True)
     self.render("index.html", tasks=tasks, q=q)
 
 
@@ -60,8 +60,6 @@ class TasksHandler(tornado.web.RequestHandler):
     collection.insert_one(
       {"task":task, "priority_order":priority_order, "deadline":deadline}
     )
-
-
     #最後にリダイレクト。
     self.redirect("/")
 
