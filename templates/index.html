@@ -30,9 +30,9 @@
 			<tbody>
 				{% for task in tasks %}
 					<tr>
-						<td>{{ task["id"] }}</td>
-						<td>{{ task["title"] }}</td>
-						<td>{{ task["created_at"] }}</td>
+						<td>{{ task["task"] }}</td>
+						<td>{{ task["registration_date"] }}</td>
+						<td>{{ task["deadline"] }}</td>
 					</tr>
 				{% end %}
 			</tbody>
@@ -41,12 +41,25 @@
 				<input type="text" id="task" name="task">
 				<br>
 
-				<label for="registration_date">優先度(1~5)：</label>
-				<input type="text" id="registration_date" name="registration_date">
+				<label for="registration_date">優先度(3=高い)：</label>
+				<select name="registration_date" id="registration_date">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+				</select>
+				<!-- <input type="text" id="registration_date" name="registration_date"> -->
 				<br>
 
 				<label for="">しめきり：</label>
-				<input type="text" id="deadline" name="deadline">
+				<!-- <input type="text" id="deadline" name="deadline"> -->
+				<select name="deadline" id="deadline">
+					<!-- valueは重要度を私的に決めたもの。1日後のタスクは重要度高いので7点としている -->
+					<option value="7">1日後</option>
+					<option value="5">3日以内</option>
+					<option value="4">1週間以内</option>
+					<option value="2">半月以内</option>
+					<option value="1">1ヶ月以内</option>
+				</select>
 				<br>
 				
 				<button>登録</button>

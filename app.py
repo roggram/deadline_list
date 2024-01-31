@@ -1,3 +1,6 @@
+# データベース名はtest_menta
+# コレクション名はtasks
+
 import os.path
 import tornado.ioloop
 import tornado.web
@@ -15,6 +18,7 @@ def data():
   tasks = collection.find()
   return tasks
 
+# ("/") にアクセスした時に以下
 class MainHandler(tornado.web.RequestHandler):
   def get(self):
     tasks = data()
@@ -26,20 +30,36 @@ class MainHandler(tornado.web.RequestHandler):
     q = self.get_argument('q')
     print(q)
     if q == "desc":
-      tasks = sorted(tasks, key=lambda o:o['created_at'], reverse=True)
+      tasks = sorted(tasks, key=lambda o:o['registration_date'])
     elif q == "asc":
       #tasksをcreated_atの値をキーとして降順に並べる
-      tasks = sorted(tasks, key=lambda o:o['created_at'])
+      tasks = sorted(tasks, key=lambda o:o['deadline'])
     self.render("index.html", tasks=tasks, q=q)
 
+
+# ("/tasks") にアクセスした時に以下
 class TasksHandler(tornado.web.RequestHandler):
   def post(self):
     #↓のprintでパラメーターの確認ができます。
     print(self.get_argument('task'))
     print(self.get_argument('registration_date'))
-    print(self.get_augument('deadline'))
+    print(self.get_argument('deadline'))
     #ここからDBに登録する。
-    
+
+    # ↓フォームから送信されたデータを各変数に格納
+    task = self.get_argument("task")
+    registration_date = self.get_argument("registration_date")
+    deadline = self.get_argument("deadline")
+
+    # ↓データベースにフォームから受け取った値を挿入
+      # test_mentaデータベースを取得
+    db = client.test_menta
+      # データベース内のtasksコレクションを取得
+    collection = db.tasks
+      # tasksコレクションにフォームで受け取ったデータを、辞書っぽく挿入
+    collection.insert_one(
+      {"task":task, "registration_date":registration_date, "deadline":deadline}
+    )
 
 
     #最後にリダイレクト。
