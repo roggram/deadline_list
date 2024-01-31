@@ -29,9 +29,9 @@ class MainHandler(tornado.web.RequestHandler):
     tasks = data()
     q = self.get_argument('q')
     print(q)
-    if q == "desc":
-      tasks = sorted(tasks, key=lambda o:o['registration_date'])
-    elif q == "asc":
+    if q == "deadline_order":
+      tasks = sorted(tasks, key=lambda o:o['priority_order'])
+    elif q == "priority_order":
       #tasksをcreated_atの値をキーとして降順に並べる
       tasks = sorted(tasks, key=lambda o:o['deadline'])
     self.render("index.html", tasks=tasks, q=q)
@@ -42,13 +42,13 @@ class TasksHandler(tornado.web.RequestHandler):
   def post(self):
     #↓のprintでパラメーターの確認ができます。
     print(self.get_argument('task'))
-    print(self.get_argument('registration_date'))
+    print(self.get_argument('priority_order'))
     print(self.get_argument('deadline'))
     #ここからDBに登録する。
 
     # ↓フォームから送信されたデータを各変数に格納
     task = self.get_argument("task")
-    registration_date = self.get_argument("registration_date")
+    priority_order = self.get_argument("priority_order")
     deadline = self.get_argument("deadline")
 
     # ↓データベースにフォームから受け取った値を挿入
@@ -58,7 +58,7 @@ class TasksHandler(tornado.web.RequestHandler):
     collection = db.tasks
       # tasksコレクションにフォームで受け取ったデータを、辞書っぽく挿入
     collection.insert_one(
-      {"task":task, "registration_date":registration_date, "deadline":deadline}
+      {"task":task, "priority_order":priority_order, "deadline":deadline}
     )
 
 
