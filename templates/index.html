@@ -26,6 +26,7 @@
 					<th>すべきこと</th>
 					<th>優先度</th>
 					<th>しめきり</th>
+					<th>操作</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,6 +35,11 @@
 						<td>{{ task["task"] }}</td>
 						<td>{{ task["priority_order"] }}</td>
 						<td>{{ task["deadline"] }}</td>
+						<td>
+							<form action="/delete/{{ task['_id'] }}" method="post">
+								<button type="submit" class="btn btn-danger">削除</button>
+							</form>
+						</td>
 					</tr>
 				{% end %}
 			</tbody>
