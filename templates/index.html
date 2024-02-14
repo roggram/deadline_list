@@ -38,9 +38,11 @@
 						<td>{{ task["priority_order"] }}</td>
 						<td>{{ task["deadline"] }}</td>
 						<td>{{ task["sum"] }}</td>
+						<!-- 削除ボタン追加 -->
 						<td>
-							<form action="/delete/{{ task['_id'] }}" method="post">
-								<button type="submit" class="btn btn-danger">削除</button>
+							<form action="/delete_task" method="post" style="display: inline;">
+								<input type="hidden" name="task_id" value="{{ task['_id'] }}">
+								<input type="submit" value="削除" class="btn btn-danger">
 							</form>
 						</td>
 					</tr>

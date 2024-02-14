@@ -60,9 +60,24 @@ class TasksHandler(tornado.web.RequestHandler):
     #最後にリダイレクト。
     self.redirect("/")
 
+class DeleteTaskHandler(tornado.web.RequestHandler):
+  def post(self):
+    # フォームから送信されたタスクのIDを取得
+    task_id = self.get_argument("task_id")
+    # MogoDBのObjectID型にtask_idを変換（必要に応じて）
+    from bson.objectid import ObjectId
+    task_id = ObjectId(task_id)
+    # タスクをデータベースから削除
+    db = client.test_menta
+    collection = db.tasks
+    collection.delete_one({"_id": task_id})
+    # 削除後ユーザーをルートパスにリダイレクト
+    self.redirect('/')
+
 application = tornado.web.Application([
   (r"/", MainHandler),
-  (r"/tasks", TasksHandler)
+  (r"/tasks", TasksHandler),
+  (r"/delete_task", DeleteTaskHandler),
   ],
   # 以下の一文の意味がわかりません
   template_path=os.path.join(os.path.dirname(__file__), 'templates')
