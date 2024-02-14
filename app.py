@@ -1,38 +1,36 @@
-# データベース名はtest_menta
-# コレクション名はtasks
-
 import os.path
 import tornado.ioloop
 import tornado.web
 from pathlib import Path
 import datetime
-# 道添以下一行を追加
 from pymongo import MongoClient
 
 # mongoDBにアプリ側からデータを入れられるようにする
 client = MongoClient("localhost:27017")
 
+# GPTによるとこの関数はMongoDBからデータを取得するためのもの
 def data():
   db = client["test_menta"]
   collection = db["tasks"]
   tasks = collection.find()
   return tasks
 
-# ("/") にアクセスした時に以下
 class MainHandler(tornado.web.RequestHandler):
+  # GPTによるとメインページにアクセスした時の処理を行う
   def get(self):
     tasks = data()
     q = ""
     self.render("index.html", tasks=tasks, q=q)
 
+  # GPTによるとメインページからフォームがPOSTされた時の処理を行う
   def post(self):
     tasks = data()
+    # 選択された方法に応じてソート処理
     q = self.get_argument('q')
     print(q)
     if q == "priority_order":
       tasks = sorted(tasks, key=lambda o:o['priority_order'],reverse=True)
     elif q == "deadline_order":
-      #tasksをdeadline_orderの降順に並べる
       tasks = sorted(tasks, key=lambda o:o['deadline'],reverse=True)
     self.render("index.html", tasks=tasks, q=q)
 
@@ -44,19 +42,15 @@ class TasksHandler(tornado.web.RequestHandler):
     print(self.get_argument('task'))
     print(self.get_argument('priority_order'))
     print(self.get_argument('deadline'))
-    #ここからDBに登録する。
-
-    # ↓フォームから送信されたデータを各変数に格納
+    #フォームからデータを受け取り、各変数に代入
     task = self.get_argument("task")
     priority_order = self.get_argument("priority_order")
     deadline = self.get_argument("deadline")
-
-    # ↓データベースにフォームから受け取った値を挿入
-      # test_mentaデータベースを取得
+    #データベースに入力された値を挿入
+      # test_mentaデータベース、コレクションを取得
     db = client.test_menta
-      # データベース内のtasksコレクションを取得
     collection = db.tasks
-      # tasksコレクションにフォームで受け取ったデータを、辞書っぽく挿入
+      # DBに辞書っぽく挿入
     collection.insert_one(
       {"task":task, "priority_order":priority_order, "deadline":deadline}
     )
@@ -74,5 +68,3 @@ application = tornado.web.Application([
 if __name__ == "__main__":
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
-
-# 新機能追加の挑戦中
