@@ -10,6 +10,7 @@
 					<option value="" {% if q=="" %} selected {% end %}>並び順を選択</option>
 					<option value="priority_order" {% if q=="priority_order" %} selected {% end %}>優先度順</option>
 					<option value="deadline_order" {% if q=="deadline_order" %} selected {% end %}>しめきり</option>
+					<option value="sum" {% if q=="sum" %} selected {% end %}>優先度＋しめきり</option>
 				</select>
 			</div>
 			<div class="form-group col">
@@ -27,6 +28,7 @@
 					<th>優先度</th>
 					<th>しめきり</th>
 					<th>操作</th>
+					<th>優先度と締切が高い</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,6 +37,7 @@
 						<td>{{ task["task"] }}</td>
 						<td>{{ task["priority_order"] }}</td>
 						<td>{{ task["deadline"] }}</td>
+						<td>{{ task["sum"] }}</td>
 						<td>
 							<form action="/delete/{{ task['_id'] }}" method="post">
 								<button type="submit" class="btn btn-danger">削除</button>

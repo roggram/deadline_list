@@ -32,6 +32,8 @@ class MainHandler(tornado.web.RequestHandler):
       tasks = sorted(tasks, key=lambda o:o['priority_order'],reverse=True)
     elif q == "deadline_order":
       tasks = sorted(tasks, key=lambda o:o['deadline'],reverse=True)
+    elif q == "sum":
+      tasks = sorted(tasks, key=lambda o:o['sum'],reverse=True)
     self.render("index.html", tasks=tasks, q=q)
 
 
@@ -46,13 +48,14 @@ class TasksHandler(tornado.web.RequestHandler):
     task = self.get_argument("task")
     priority_order = self.get_argument("priority_order")
     deadline = self.get_argument("deadline")
+    sum = priority_order + deadline
     #データベースに入力された値を挿入
       # test_mentaデータベース、コレクションを取得
     db = client.test_menta
     collection = db.tasks
       # DBに辞書っぽく挿入
     collection.insert_one(
-      {"task":task, "priority_order":priority_order, "deadline":deadline}
+      {"task":task, "priority_order":priority_order, "deadline":deadline, "sum":sum}
     )
     #最後にリダイレクト。
     self.redirect("/")
