@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form action="/edit_task/{{ task['_id'] }}" method="post">
+    <label for="task">すべきこと：</label>
+    <input type="text" id="task" name="task" value="{{ task['task'] }}">
+    <br>
+
+    <label for="priority_order">優先度：</label>
+    <select name="priority_order" id="priority_order">
+        <option value="1" {% if task['priority_order'] == 1 %} selected {% endif %}>1</option>
+        <option value="2" {% if task['priority_order'] == 2 %} selected {% endif %}>2</option>
+        <option value="3" {% if task['priority_order'] == 3 %} selected {% endif %}>3</option>
+    </select>
+    <br>
+
+    <label for="deadline">しめきり：</label>
+    <input type="text" id="deadline" name="deadline" value="{{ task['deadline'] }}">
+    <br>
+
+    <input type="submit" value="更新">
+</form>
+{% endblock %}

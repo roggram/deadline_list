@@ -19,10 +19,10 @@ class MainHandler(tornado.web.RequestHandler):
   # GPTによるとメインページにアクセスした時の処理を行う
   def get(self):
     tasks = data()
-    q = ""
+    q = "sum"
     self.render("index.html", tasks=tasks, q=q)
-
   # GPTによるとメインページからフォームがPOSTされた時の処理を行う
+  # どの基準でソートするかのスクリプトは以下のpostメソッドに記述
   def post(self):
     tasks = data()
     # 選択された方法に応じてソート処理
@@ -38,6 +38,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 
 # ("/tasks") にアクセスした時に以下
+# GPT：ユーザーからの新しいタスク入力を処理しデータベースに記述
 class TasksHandler(tornado.web.RequestHandler):
   def post(self):
     #↓のprintでパラメーターの確認ができます。
@@ -73,6 +74,7 @@ class DeleteTaskHandler(tornado.web.RequestHandler):
     collection.delete_one({"_id": task_id})
     # 削除後ユーザーをルートパスにリダイレクト
     self.redirect('/')
+
 
 application = tornado.web.Application([
   (r"/", MainHandler),
