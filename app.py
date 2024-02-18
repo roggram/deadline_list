@@ -19,7 +19,7 @@ class MainHandler(tornado.web.RequestHandler):
   # GPTによるとメインページにアクセスした時の処理を行う
   def get(self):
     tasks = data()
-    q = "sum"
+    q = ""
     self.render("index.html", tasks=tasks, q=q)
   # GPTによるとメインページからフォームがPOSTされた時の処理を行う
   # どの基準でソートするかのスクリプトは以下のpostメソッドに記述
@@ -75,11 +75,52 @@ class DeleteTaskHandler(tornado.web.RequestHandler):
     # 削除後ユーザーをルートパスにリダイレクト
     self.redirect('/')
 
+class EditTaskHandler(tornado.web.RequestHandler):
+  def get(self):
+    task_id = self.get_argument('task_id')
+    from bson.objectid import ObjectId
+    task_id = ObjectId(task_id)
+    db = client.test_menta
+    collection = db.tasks
+    task = collection.find_one({'_id': task_id})
+    self.render("edit_task.html", task = task)
+
+
+class UpdateTaskHandler(tornado.web.RequestHandler):
+    def post(self):
+        task_id = self.get_argument('task_id')
+        from bson.objectid import ObjectId
+        task_id = ObjectId(task_id)
+        task = self.get_argument('task')
+        priority_order = self.get_argument('priority_order')
+        deadline = self.get_argument('deadline')
+        sum = priority_order + deadline
+
+        # MongoDBのタスクドキュメントを更新
+        db = client.test_menta
+        collection = db.tasks
+        collection.update_one(
+            {'_id': task_id},
+            {'$set': 
+                {
+                    'task': task,
+                    'priority_order': int(priority_order),
+                    'deadline': int(deadline),
+                    'sum': sum,
+                }
+            }
+        )
+        
+        # タスク一覧ページへリダイレクト
+        self.redirect('/')
+
 
 application = tornado.web.Application([
   (r"/", MainHandler),
   (r"/tasks", TasksHandler),
   (r"/delete_task", DeleteTaskHandler),
+  (r"/edit_task", EditTaskHandler),
+  (r"/update_task", UpdateTaskHandler),
   ],
   # 以下の一文の意味がわかりません
   template_path=os.path.join(os.path.dirname(__file__), 'templates')

@@ -28,7 +28,8 @@
 					<th>優先度</th>
 					<th>しめきり</th>
 					<th>総合値</th>
-					<th>操作</th>
+					<th>削除</th>
+					<th>編集</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -42,6 +43,12 @@
 							<form action="/delete_task" method="post" style="display: inline;">
 								<input type="hidden" name="task_id" value="{{ task['_id'] }}">
 								<input type="submit" value="削除" class="btn btn-danger">
+							</form>
+						</td>
+						<td>
+							<form action="/edit_task" method="get">
+								<input type="hidden" name="task_id" value="{{ task['_id'] }}">
+								<input type="submit" value="編集">
 							</form>
 						</td>
 					</tr>
