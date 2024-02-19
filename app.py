@@ -49,14 +49,14 @@ class TasksHandler(tornado.web.RequestHandler):
     task = self.get_argument("task")
     priority_order = self.get_argument("priority_order")
     deadline = self.get_argument("deadline")
-    sum = priority_order + deadline
+    sum = int(priority_order) + int(deadline)
     #データベースに入力された値を挿入
       # test_mentaデータベース、コレクションを取得
     db = client.test_menta
     collection = db.tasks
       # DBに辞書っぽく挿入
     collection.insert_one(
-      {"task":task, "priority_order":priority_order, "deadline":deadline, "sum":sum}
+      {"task":task, "priority_order":int(priority_order), "deadline":int(deadline), "sum":int(sum)}
     )
     #最後にリダイレクト。
     self.redirect("/")
@@ -94,7 +94,7 @@ class UpdateTaskHandler(tornado.web.RequestHandler):
         task = self.get_argument('task')
         priority_order = self.get_argument('priority_order')
         deadline = self.get_argument('deadline')
-        sum = priority_order + deadline
+        sum = int(priority_order) + int(deadline)
 
         # MongoDBのタスクドキュメントを更新
         db = client.test_menta
@@ -106,7 +106,7 @@ class UpdateTaskHandler(tornado.web.RequestHandler):
                     'task': task,
                     'priority_order': int(priority_order),
                     'deadline': int(deadline),
-                    'sum': sum,
+                    'sum': int(sum),
                 }
             }
         )
