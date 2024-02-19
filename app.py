@@ -39,7 +39,7 @@ class MainHandler(tornado.web.RequestHandler):
 
 # ("/tasks") にアクセスした時に以下
 # GPT：ユーザーからの新しいタスク入力を処理しデータベースに記述
-class TasksHandler(tornado.web.RequestHandler):
+class PostTaskHandler(tornado.web.RequestHandler):
   def post(self):
     #↓のprintでパラメーターの確認ができます。
     print(self.get_argument('task'))
@@ -117,7 +117,7 @@ class UpdateTaskHandler(tornado.web.RequestHandler):
 
 application = tornado.web.Application([
   (r"/", MainHandler),
-  (r"/tasks", TasksHandler),
+  (r"/post_task", PostTaskHandler),
   (r"/delete_task", DeleteTaskHandler),
   (r"/edit_task", EditTaskHandler),
   (r"/update_task", UpdateTaskHandler),
