@@ -10,6 +10,7 @@
 					<option value="" {% if q=="" %} selected {% end %}>並び順を選択</option>
 					<option value="priority_order" {% if q=="priority_order" %} selected {% end %}>優先度順</option>
 					<option value="deadline_order" {% if q=="deadline_order" %} selected {% end %}>しめきり</option>
+					<option value="sum" {% if q=="sum" %} selected {% end %}>優先度＆しめきり</option>
 				</select>
 			</div>
 			<div class="form-group col">
@@ -26,6 +27,9 @@
 					<th>すべきこと</th>
 					<th>優先度</th>
 					<th>しめきり</th>
+					<th>総合値</th>
+					<th>削除</th>
+					<th>編集</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -34,10 +38,23 @@
 						<td>{{ task["task"] }}</td>
 						<td>{{ task["priority_order"] }}</td>
 						<td>{{ task["deadline"] }}</td>
+						<td>{{ task["sum"] }}</td>
+						<td>
+							<form action="/delete_task" method="post" style="display: inline;">
+								<input type="hidden" name="task_id" value="{{ task['_id'] }}">
+								<input type="submit" value="削除" class="btn btn-danger">
+							</form>
+						</td>
+						<td>
+							<form action="/edit_task" method="get">
+								<input type="hidden" name="task_id" value="{{ task['_id'] }}">
+								<input type="submit" value="編集">
+							</form>
+						</td>
 					</tr>
 				{% end %}
 			</tbody>
-			<form action="/tasks" method="post">
+			<form action="/post_task" method="post">
 				<label for="">すべきこと：</label>
 				<input type="text" id="task" name="task">
 				<br>

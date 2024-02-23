@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>タスク編集</h1>
+    <form action="/update_task" method="post">
+        <input type="hidden" name="task_id" value="{{ task['_id'] }}">
+        <div class="form-group">
+            <label for="task">すべきこと：</label>
+            <input type="text" class="form-control" id="task" name="task" value="{{ task['task'] }}" required>
+        </div>
+        <div class="form-group">
+            <label for="priority_order">優先度(3=高い)：</label>
+            <select class="form-control" name="priority_order" id="priority_order">
+                <option value="1" {% if task['priority_order'] == 1 %} selected {% end %}>1</option>
+                <option value="2" {% if task['priority_order'] == 2 %} selected {% end %}>2</option>
+                <option value="3" {% if task['priority_order'] == 3 %} selected {% end %}>3</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="deadline">しめきり：</label>
+            <select class="form-control" name="deadline" id="deadline">
+                <option value="7" {% if task['deadline'] == 7 %} selected {% end %}>1日後</option>
+                <option value="5" {% if task['deadline'] == 5 %} selected {% end %}>3日以内</option>
+                <option value="4" {% if task['deadline'] == 4 %} selected {% end %}>1週間以内</option>
+                <option value="2" {% if task['deadline'] == 2 %} selected {% end %}>半月以内</option>
+                <option value="1" {% if task['deadline'] == 1 %} selected {% end %}>1ヶ月以内</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">編集完了</button>
+    </form>
+</div>
+{% end %}
