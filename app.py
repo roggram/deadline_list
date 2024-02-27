@@ -18,14 +18,16 @@ def data():
   return tasks
 
 class BaseHandler(tornado.web.RequestHandler):
+    # ???
     def get_current_user_id(self):
+# ???
         username = self.get_secure_cookie("user")
         if username:
             user = db.users.find_one({"username": username.decode('utf-8')})
             if user:
                 return str(user["_id"])  # MongoDBのObjectIdを文字列に変換して返す
         return None
-    
+    # ???
     def get_current_user(self):
         return self.get_secure_cookie("user")
 
@@ -35,7 +37,7 @@ class MainHandler(BaseHandler):
     user_id = self.get_current_user_id()  # 現在ログインしているユーザーのIDを取得
     if user_id:
         # ログインしているユーザーに紐づくタスクのみを取得
-        tasks = db.tasks.find({"user_id": user_id})
+        tasks = db.tasks.find({"user_id": user_id}).sort('sum', -1)
     else:
         tasks = []
     self.render("index.html", tasks=tasks, q="")
@@ -43,13 +45,14 @@ class MainHandler(BaseHandler):
     # tasks = data()
     # q = ""
     # self.render("index.html", tasks=tasks, q=q)
+
   # GPTによるとメインページからフォームがPOSTされた時の処理を行う
   # どの基準でソートするかのスクリプトは以下のpostメソッドに記述
   @tornado.web.authenticated
   def post(self):
     tasks = data()
     # 選択された方法に応じてソート処理
-    q = self.get_argument('q')
+    q = self.get_argument('q', 'sum')
     print(q)
     if q == "priority_order":
       tasks = sorted(tasks, key=lambda o:o['priority_order'],reverse=True)
@@ -93,7 +96,6 @@ class DeleteTaskHandler(BaseHandler):
   @tornado.web.authenticated
   def post(self):
     user_id = self.get_current_user_id()  # 現在ログインしているユーザーのIDを取得
-    # フォームから送信されたタスクのIDを取得
     task_id = self.get_argument("task_id")
     # MogoDBのObjectID型にtask_idを変換（必要に応じて）
     from bson.objectid import ObjectId
@@ -158,7 +160,6 @@ class RegisterHandler(BaseHandler):
   def post(self):
         username = self.get_argument("username")
         password = self.get_argument("password").encode('utf-8')
-        #？？
         hashed_password = bcrypt.hashpw(password, bcrypt.gensalt())
         
         # ユーザー名が既に存在するかチェック
